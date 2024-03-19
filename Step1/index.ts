@@ -8,6 +8,9 @@ const resonate = new Resonate();
 // Register a function as a Resonate function
 resonate.register("downloadAndSummarize", downloadAndSummarize, resonate.options({ timeout: 20000 }));
 
+// Start the Resonate application
+resonate.start();
+
 // Initialize an Express application.
 const app = express().use(express.json());
 
@@ -23,6 +26,7 @@ app.post("/summarize", async (req: Request, res: Response) => {
     }
 });
 
+// Start the Express application
 app.listen(3000, () => {
     console.log("Listening on port 3000");
 });
