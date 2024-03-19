@@ -40,4 +40,4 @@ In [Step 2](./Step2/Readme.md), boost your application's **reliability** by inte
 
 ## Step 3 🏴‍☠️ 
 
-In [Step 2](./Step2/Readme.md), boost your application's **scalability** by deploying Resonate Workers, enabling fan out and fan in to mitigate demand.
+In [Step 3](./Step3/Readme.md), boost your application's **scalability** by deploying Resonate Workers, enabling fan out and fan in to mitigate demand.
