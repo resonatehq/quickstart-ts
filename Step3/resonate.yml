@@ -1,0 +1,11 @@
+aio:
+  subsystems:
+    queuing:
+      config:
+        connections:
+          - kind: http
+            name: summarize
+            pattern: /gpu/summarize/*
+            metadata:
+              properties:
+                url: http://localhost:5001
