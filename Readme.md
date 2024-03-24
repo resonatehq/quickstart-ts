@@ -2,28 +2,27 @@
 # Quickstart • TypeScript SDK for Resonate
 
 <p align="center">
-    <img height="170"src="./docs/imgs/quickstart.png">
+    <img height="240"src="./docs/imgs/quickstart.png">
 </p>
 
-This quickstart will introduce the Resonate TypeScript SDK step-by-step
 
 ## The Sample Application
 
-The sample is an Express web app using the Resonate SDK to simulate the process of web content summarization:
+This quickstart will introduce the Resonate TypeScript SDK in three steps. The sample application is an Express web application using the Resonate SDK to simulate the process of web content summarization:
 
 ```bash
 # Summarize a URL
 $ curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
 ```
 
-The function `downloadAndSummarize` consists of two steps and calls `download` and `summarize`. Both download and summarize return a hard coded value but introduce deliberate delays and errors to mimic real-world behavior:
+The central function is `downloadAndSummarize`. `downloadAndSummarize` calls two functions, `download` and `summarize`. Both `download` and `summarize` return a hard coded value but introduce a deliberate delay and may throw an exception to mimic real-world behavior:
 
 ```typescript
 // Simulates downloading and summarizing web content.
 export async function downloadAndSummarize(ctx: Context, url: string) {
-    // Simulate downloading content.
+    // Simulate downloading content. May throw an exception 💣
     let content = await ctx.run(download, url);
-    // Simulate summarizing the downloaded content.
+    // Simulate summarizing the downloaded content. May throw an exception 💣
     let summary = await ctx.run(summarize, content);
     // return summary
     return summary;
@@ -32,7 +31,7 @@ export async function downloadAndSummarize(ctx: Context, url: string) {
 
 ## Step 1 🏴‍☠️ 
 
-In [Step 1](./Step1/Readme.md), develop your first Distributed Async Await application with the Resonate SDK, enjoying transparent retries, rate limits, tracing, and metrics.
+In [Step 1](./Step1/Readme.md), develop your first *Distributed Async Await* application with the Resonate SDK. This step illustrates features such as transparent retries, rate limits, or tracing, simply through the integration of the Resonate SDK, without the need for any additional infrastructure.
 
 ## Step 2 🏴‍☠️ 
 

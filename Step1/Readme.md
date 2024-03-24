@@ -1,6 +1,6 @@
 # Quickstart • Step 1 🏴‍☠️
 
-Build your first Distributed Async Await application using the Resonate SDK, enjoying transparent retries, rate limits, tracing, and metrics. Without depending on any platform or infrastructure.
+Explore **Distributed Async Await** with the Resonate SDK. This guide walks you throught the basics to create an application showcasing features like transparent retries, rate limits, and tracing—no additional infrastructure needed.
 
 ## Installation & Running the Application
 
@@ -21,7 +21,7 @@ npm start
 
 ## Understanding the Application
 
-The Express web application exposes the `/summarize` calls `downloadAndSummarize` via `resonate.run`  
+Built on Express, this web app exposes a /summarize http handler that calls  calls `downloadAndSummarize` via `resonate.run`. transitioning from async await to Distributed Async Await.
 
 ```typescript
 import express, { Request, Response } from "express";
@@ -44,7 +44,7 @@ const app = express().use(express.json());
 app.post("/summarize", async (req: Request, res: Response) => {
     const url = req.body?.url;
     try {
-        // Call the resonate function
+        // Call the resonate function with a unique identifer
         let summary = await resonate.run("downloadAndSummarize", /* id */ `summarize-${url}`, /* param */ url);
         res.send(summary);
     } catch (e) {
@@ -58,20 +58,39 @@ app.listen(3000, () => {
 });
 ```
 
+Similar to the Express web application, we instantiate a resonate object, register the functions we intend to call via `resonate.run`, and start the application.
+
+`resonate.run` requires a unique identifer. If you supply the same identifer, `resonate.run` returns the same execution－or rather the same promise representing the execution.
+
+From hereon, Resonate manages the function execution, adding retries, rate limiting, or tracing.
+
+```typescript
+export async function downloadAndSummarize(context: Context, url: string) {
+    // Download the content from the provided URL
+    let content = await context.run(download, url);
+
+    // Summarize the downloaded content
+    let summary = await context.run(summarize, content);
+
+    // Return the summary of the content
+    return summary;
+}
+```
+
+Resonate calls every function with a Context object as the first argument. You have to call asynchronous functions via context.run so Resonate is able to control the execution.
+
 #### Experiment with the Application
 
-Test the app by sending a POST request to the `/summarize` endpoint. On the first request, the app simulates downloading and summarizing, introducing a delay of 5 sec.
+Test the app by sending a POST request to the `/summarize` endpoint. The app simulates downloading and summarizing, introducing a delay of 5 sec. If `download` or `summarize` raise an exception, Resonate will retry the function call.
 
 ```bash
-# Summarize a URL for the first time
-$ curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
+curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
 ```
 
-On subsequent requests with the same URL, the SDK's deduplicates the request: A resonate function execution and its associated promise have an identity, here `summarize-${url}`. Using the same identity yields the same result (see [Memoization](https://en.wikipedia.org/wiki/Memoization) for an introduction).
+On subsequent requests with the same URL, Resonate does not start the execution again but returns the same promise. However, restarting the application without a connected Resonate Server means starting afresh, as previous states aren't preserved.
 
-```bash
-# Summarize the URL for the second time
-$ curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
-```
+# tl;dr
 
-Restarting the application without a connected Resonate Server means starting afresh, as previous states aren't preserved. This demonstrates the necessity of persistent state management for distributed applications.
+- `resonate.run` marks the transition from async await to Distributed Async Await
+- `resonate.run` requires a unique identifer invocation. If the same identifer is used, `resonate.run` returns the same execution.
+- `resonate.run` adds transparent retries, rate limits, or tracing, simply through the integration of the Resonate SDK, without the need for any additional infrastructure.
