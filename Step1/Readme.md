@@ -4,9 +4,13 @@ Explore **Distributed Async Await** with the Resonate SDK. This guide walks you 
 
 ## Installation & Running the Application
 
+#### Prerequisites
+
+- NodeJS
+
 #### Installing the Application
 
-Clone the repository, navigate to the ./Step1 directory, and install the dependencies:
+Clone the repository, navigate to the ./Step1 directory, and install dependencies:
 
 ```bash
 npm install
@@ -21,7 +25,7 @@ npm start
 
 ## Understanding the Application
 
-Built on Express, this web app exposes a /summarize http handler that calls  calls `downloadAndSummarize` via `resonate.run`. transitioning from async await to Distributed Async Await.
+This application simulates downloading and summarizing web content. Built on Express, the web app exposes a `/summarize` http handler that calls `downloadAndSummarize` via `resonate.run`.
 
 ```typescript
 import express, { Request, Response } from "express";
