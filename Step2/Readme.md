@@ -4,12 +4,16 @@ boost your application's **reliability** by integrating with a Resonate Server, 
 
 ## Installation & Running the Application
 
+#### Prerequisites
+
+- NodeJS
+
 #### Installing the Application
 
-Install the Resonate Server (see [Installation Instractions]() for installation options):
+Install the Resonate Server (see [Installation Instractions](https://docs.resonatehq.io/resonate/quickstart) for installation options):
 
 ```
-brew install
+brew install --build-from-source resonate-hq/resonate/installation/brew/Formula/resonate.rb
 ```
 
 Clone the repository, navigate to the ./Step2 directory, and install the dependencies:
@@ -42,18 +46,10 @@ const resonate = new Resonate({ url: "http://localhost:8001" });
 
 #### Experiment with the Application
 
-On the first request, the app simulates downloading and summarizing, introducing a delay of 5 sec.
+Test the app by sending a POST request to the `/summarize` endpoint. The app simulates downloading and summarizing, introducing a delay of 5 sec. If `download` or `summarize` raise an exception, Resonate will retry the function call.
 
 ```bash
-# Summarize a URL for the first time
-$ curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
-```
-
-Now, on subsequent requests with the same URL, the SDK's deduplicates the request, regardless if you restart the application－or the Server－in between.
-
-```bash
-# Summarize the URL for the second time
-$ curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
+curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
 ```
 
 The Resoante SDK connects to the Resonate Server to track the state of an execution, or more accurately the state of the promises representing an execution. You can inspect the state via the Resonate CLI.
@@ -85,3 +81,10 @@ Tags:
 ```
 
 To learn more about Durable Promises, visit the [Durable Promise Specification](https://github.com/resonatehq/durable-promise-specification)
+
+# tl;dr
+
+- `resonate.run` marks the transition from async await to Distributed Async Await
+- `resonate.run` requires a unique identifer invocation. If the same identifer is used, `resonate.run` returns the same execution.
+- `resonate.run` adds transparent retries, rate limits, or tracing, simply through the integration of the Resonate SDK, without the need for any additional infrastructure.
+- When connected to a Resonate Server, `resonate.run` tracks the state of an execution, or more accurately the state of its durable promise
