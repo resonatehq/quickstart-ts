@@ -5,53 +5,53 @@ from flask import Flask, request, jsonify
 
 from concurrent.futures import ThreadPoolExecutor
 
-executor = ThreadPoolExecutor(2)
-
 app = Flask(__name__)
+
+exe = ThreadPoolExecutor(2)
 
 API_URL = "http://localhost:8001"
 CLAIM_URL = API_URL + "/tasks/claim"
 COMPLETE_URL = API_URL + "/tasks/complete"
 
+
 @app.route("/", methods=["POST"])
 def handler():
     print("Task received", request.get_json())
     try:
-        executor.submit(process, request.get_json())
- 
-        return jsonify({"message": "Doing the work..."})
+        exe.submit(process, request.get_json())
+        return "OK", 200
     except Exception as e:
         print(f"Error: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 def process(request):
     try:
-        # 1) Receive available task.
-        task_id = request["taskId"]
-        counter = request["counter"]
 
-        print("Claiming task", task_id, counter)
+        req = request
+        task_id = req["taskId"]
+        counter = req["counter"]
 
-        # 2) Claim the task.
-        claim_req = {
+
+        # 1) Claim the task.
+        print("Claiming task", request)
+        response = requests.post(CLAIM_URL, json = {    #request['links']['claim'], json={
             "taskId": task_id,
             "counter": counter,
             "processId": "process-id",
             "executionId": "execution-id",
             "expiryInSeconds": 60
-        }
-        response = requests.post(CLAIM_URL, json=claim_req)
+        })
         response.raise_for_status()
+
+
+        # 2) Do work on the task...
         promise = response.json()
 
-        print("Task claimed", task_id, counter)
+        print("Download and summarize", promise)
 
-        # 3) Do work on the task...
         summary = "This is a summary of the text"
 
-        print("Completing task", task_id, counter)
-
-        # 4) Complete the task.
+        # 3) Complete the task.
         complete_req = {
             "taskId": task_id,
             "counter": counter,
@@ -59,7 +59,6 @@ def process(request):
             "state": "resolved",
             "value": {
                 "headers": {"Content-Type": "application/json"},
-                # "data": base64.b64encode('"This is a summary of the text"'.encode()).decode()
                 "data": base64.b64encode(f'"{summary}"'.encode()).decode()
             }
         }

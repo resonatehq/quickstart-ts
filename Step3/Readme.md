@@ -76,9 +76,15 @@ The files `worker.ts` and `worker.py` illustrate how to develop a Resonate Worke
 On request, the app creates a Durable Promise and waits for the remote execution to finish. 
 
 ```bash
-# Summarize a URL for the first time
-$ curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
+curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
 ```
+
+The Resoante SDK connects to the Resonate Server to track the state of an execution, or more accurately the state of the promises representing an execution. You can inspect the state via the Resonate CLI.
+
+```bash
+resonate promise get summarize-http://example.com
+```
+
 
 The worker logs processing the task:
 
