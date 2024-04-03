@@ -25,7 +25,7 @@ def process(request):
         task_id = request["taskId"]
         counter = request["counter"]
         claim_url = request["links"]["claim"]
-        comlete_url = request["links"]["complete"]
+        complete_url = request["links"]["complete"]
 
         print("Claiming task", task_id, counter)
 
@@ -60,7 +60,7 @@ def process(request):
                 "data": base64.b64encode(f'"{summary}"'.encode()).decode()
             }
         }
-        response = requests.post(comlete_url, json=complete_req)
+        response = requests.post(complete_url, json=complete_req)
         response.raise_for_status()
 
         print("Task completed", task_id, counter)
