@@ -1,9 +1,6 @@
 import express, { Request, Response } from 'express';
 
 const app = express();
-const API_URL = 'http://localhost:8001';
-const CLAIM_URL = `${API_URL}/tasks/claim`;
-const COMPLETE_URL = `${API_URL}/tasks/complete`;
 
 app.use(express.json());
 
@@ -20,12 +17,12 @@ app.post('/', (req: Request, res: Response) => {
 
 async function process(request: any): Promise<void> {
 
-  const { taskId, counter } = request;
+    const { taskId, counter, links: { claim: claimUrl, complete: completeUrl } } = request;
 
   console.log("Claiming task", taskId, counter);
 
   // Claim the task
-  let response = await fetch(CLAIM_URL, {
+  let response = await fetch(claimUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -33,7 +30,7 @@ async function process(request: any): Promise<void> {
       counter,
       processId: 'process-id',
       executionId: 'execution-id',
-      expiryInSeconds: 60,
+      expiryInMilliseconds: 60,
     }),
   });
 
@@ -53,7 +50,7 @@ async function process(request: any): Promise<void> {
 
   console.log("Completing task", taskId, counter);
 
-  response = await fetch(COMPLETE_URL, {
+  response = await fetch(completeUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

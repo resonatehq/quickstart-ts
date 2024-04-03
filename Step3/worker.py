@@ -9,16 +9,11 @@ executor = ThreadPoolExecutor(2)
 
 app = Flask(__name__)
 
-API_URL = "http://localhost:8001"
-CLAIM_URL = API_URL + "/tasks/claim"
-COMPLETE_URL = API_URL + "/tasks/complete"
-
 @app.route("/", methods=["POST"])
 def handler():
     print("Task received", request.get_json())
     try:
         executor.submit(process, request.get_json())
- 
         return jsonify({"message": "Doing the work..."})
     except Exception as e:
         print(f"Error: {str(e)}")
@@ -29,6 +24,8 @@ def process(request):
         # 1) Receive available task.
         task_id = request["taskId"]
         counter = request["counter"]
+        claim_url = request["links"]["claim"]
+        complete_url = request["links"]["complete"]
 
         print("Claiming task", task_id, counter)
 
@@ -38,9 +35,9 @@ def process(request):
             "counter": counter,
             "processId": "process-id",
             "executionId": "execution-id",
-            "expiryInSeconds": 60
+            "expiryInMilliseconds": 60
         }
-        response = requests.post(CLAIM_URL, json=claim_req)
+        response = requests.post(claim_url, json=claim_req)
         response.raise_for_status()
         promise = response.json()
 
@@ -63,7 +60,7 @@ def process(request):
                 "data": base64.b64encode(f'"{summary}"'.encode()).decode()
             }
         }
-        response = requests.post(COMPLETE_URL, json=complete_req)
+        response = requests.post(complete_url, json=complete_req)
         response.raise_for_status()
 
         print("Task completed", task_id, counter)

@@ -1,3 +1,6 @@
+# api:
+#   baseUrl: http://example.com
+
 aio:
   subsystems:
     queuing:
@@ -5,7 +8,16 @@ aio:
         connections:
           - kind: http
             name: summarize
-            pattern: /gpu/summarize/*
             metadata:
               properties:
                 url: http://localhost:5001
+
+        routes:
+          - kind: pattern
+            name: default
+            target:
+              connection: summarize
+              queue: analytics
+            metadata:
+              properties:
+                pattern: /gpu/summarize/*
