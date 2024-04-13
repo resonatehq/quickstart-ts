@@ -8,8 +8,8 @@ Boost your application's **scalability** by deploying Resonate Workers, enabling
 
 Install the Resonate Server (see [Installation Instractions]() for installation options):
 
-```
-brew install
+```bash
+brew install resonatehq/tap/resonate
 ```
 
 Clone the repository, navigate to the ./Step3 directory, and install the dependencies:
@@ -35,7 +35,7 @@ npm start
 In a new terminal, to launch your application, enter:
 
 ```bash
-npm start-worker
+npm run start-worker
 ```
 
 ## Understanding the Application
@@ -87,8 +87,7 @@ The files `worker.ts` and `worker.py` illustrate how to develop a Resonate Worke
 On request, the app creates a Durable Promise and waits for the remote execution to finish.
 
 ```bash
-# Summarize a URL for the first time
-$ curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
+curl -X POST http://localhost:3000/summarize -H "Content-Type: application/json" -d '{"url": "http://example.com"}'
 ```
 
 The worker logs processing the task:

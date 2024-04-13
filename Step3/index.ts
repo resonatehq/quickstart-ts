@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { Resonate, Context } from "@resonatehq/sdk/dist/async";
+import { Resonate } from "@resonatehq/sdk/dist/async";
 import { downloadAndSummarize } from "./app";
 
 // Initialize a Resonate application.

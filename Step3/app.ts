@@ -1,4 +1,4 @@
-import * as resonate from "@resonatehq/sdk";
+import { Context } from "@resonatehq/sdk";
 
 /**
  * Asynchronously downloads and summarizes the text from a given URL.

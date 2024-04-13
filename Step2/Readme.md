@@ -12,8 +12,8 @@ boost your application's **reliability** by integrating with a Resonate Server, 
 
 Install the Resonate Server (see [Installation Instractions](https://docs.resonatehq.io/resonate/quickstart) for installation options):
 
-```
-brew install --build-from-source resonate-hq/resonate/installation/brew/Formula/resonate.rb
+```bash
+brew install resonatehq/tap/resonate
 ```
 
 Clone the repository, navigate to the ./Step2 directory, and install the dependencies:
@@ -21,6 +21,7 @@ Clone the repository, navigate to the ./Step2 directory, and install the depende
 ```bash
 npm install
 ```
+
 #### Running the Application
 
 To launch the Resonate Server, enter:
