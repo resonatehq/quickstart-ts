@@ -20,7 +20,7 @@ npm install
 
 #### Running the Application
 
-To launch the Resonate Server, enter:
+To launch the Resonate Server (which will pick up the resonate.yml file in the current directory), enter:
 
 ```bash
 resonate serve
