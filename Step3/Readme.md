@@ -6,7 +6,7 @@ Boost your application's **scalability** by deploying Resonate Workers, enabling
 
 #### Installing the Application
 
-Install the Resonate Server (see [Installation Instractions]() for installation options):
+Install the Resonate Server:
 
 ```bash
 brew install resonatehq/tap/resonate
