@@ -10,7 +10,7 @@ boost your application's **reliability** by integrating with a Resonate Server, 
 
 #### Installing the Application
 
-Install the Resonate Server (see [Installation Instractions](https://docs.resonatehq.io/resonate/quickstart) for installation options):
+Install the Resonate Server:
 
 ```bash
 brew install resonatehq/tap/resonate
