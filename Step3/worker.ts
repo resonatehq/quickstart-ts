@@ -8,10 +8,10 @@ app.post('/', (req: Request, res: Response) => {
   console.log("Task received", req.body);
   try {
     process(req.body).catch(error => console.error("Error while processing task", error));
-    res.status(200);
+    res.status(200).send();
   } catch (e) {
     console.error("Error", e);
-    res.status(500);
+    res.status(500).send();
   }
 });
 
